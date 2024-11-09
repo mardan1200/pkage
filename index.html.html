@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عمر کیلکولیٹر</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+        #ageCalculator {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+            transform: perspective(800px);
+            transition: transform 0.5s ease;
+        }
+        #ageCalculator:hover {
+            transform: rotateY(15deg) scale(1.05);
+        }
+        input[type="date"] {
+            padding: 10px;
+            width: 100%;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transform: translateZ(0);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        #result {
+            margin-top: 15px;
+            font-size: 18px;
+        }
+        #currentTime {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #visitorCount {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        #dateDisplay {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        #ownerName {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        #titleContainer {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div id="titleContainer">
+        <h2 id="title">Age Calculator / عمر کیلکولیٹر</h2>
+    </div>
+    <div id="ageCalculator">
+        <label id="birthdateLabel" for="birthdate">Enter your birthdate: اپنی تاریخ پیدائش درج کریں:</label>
+        <input type="date" id="birthdate">
+        <button onclick="calculateAge()" id="calculateButton">Calculate Age / عمر معلوم کریں</button>
+        <p id="result"></p>
+        <p id="currentTime"></p>
+    </div>
+
+    <div id="visitorCount">
+        <p>Visitor Count: <span id="viewCount">0</span></p>
+    </div>
+
+    <div id="dateDisplay">
+        <p id="currentDate"></p>
+    </div>
+
+    <div id="ownerName">
+        <p>Owner: Sudhair</p>
+    </div>
+
+    <button onclick="changeLanguage('en')" id="enButton">Switch to English</button>
+    <button onclick="changeLanguage('ur')" id="urButton">سویچ کریں اردو</button>
+
+    <script>
+        let currentLanguage = 'ur'; // Default language is Urdu
+        let visitorCount = 0;
+
+        // Update the time every second
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+
+            // Format time to always show two digits
+            hours = (hours < 10 ? '0' : '') + hours;
+            minutes = (minutes < 10 ? '0' : '') + minutes;
+            seconds = (seconds < 10 ? '0' : '') + seconds;
+
+            const timeString = `${hours}:${minutes}:${seconds}`;
+            document.getElementById("currentTime").textContent = "Current Time: " + timeString;
+
+            // Update every second
+            setTimeout(updateTime, 1000);
+        }
+
+        // Update the current date
+        function updateDate() {
+            const today = new Date();
+            const day = today.getDate();
+            const month = today.getMonth() + 1; // Months are 0-based
+            const year = today.getFullYear();
+            const dateString = `${day < 10 ? '0' : ''}${day}-${month < 10 ? '0' : ''}${month}-${year}`;
+
+            document.getElementById("currentDate").textContent = "Current Date: " + dateString;
+        }
+
+        // Function to update visitor count
+        function updateVisitorCount() {
+            visitorCount++;
+            document.getElementById("viewCount").textContent = visitorCount;
+        }
+
+        // Change language function
+        function changeLanguage(language) {
+            currentLanguage = language;
+
+            // Update UI text based on selected language
+            if (currentLanguage === 'en') {
+                document.getElementById("title").textContent = "Age Calculator";
+                document.getElementById("birthdateLabel").textContent = "Enter your birthdate:";
+                document.getElementById("calculateButton").textContent = "Calculate Age";
+                document.getElementById("enButton").style.display = 'none';
+                document.getElementById("urButton").style.display = 'inline-block';
+            } else {
+                document.getElementById("title").textContent = "عمر کیلکولیٹر";
+                document.getElementById("birthdateLabel").textContent = "اپنی تاریخ پیدائش درج کریں:";
+                document.getElementById("calculateButton").textContent = "عمر معلوم کریں";
+                document.getElementById("enButton").style.display = 'inline-block';
+                document.getElementById("urButton").style.display = 'none';
+            }
+        }
+
+        function calculateAge() {
+            const birthdate = document.getElementById("birthdate").value;
+            const result = document.getElementById("result");
+
+            if (birthdate === "") {
+                result.textContent = currentLanguage === 'en' ? "Please enter your birthdate." : "براہ کرم اپنی تاریخ پیدائش درج کریں۔";
+                return;
+            }
+
+            const birthDate = new Date(birthdate);
+            const today = new Date();
+
+            let years = today.getFullYear() - birthDate.getFullYear();
+            let months = today.getMonth() - birthDate.getMonth();
+            let days = today.getDate() - birthDate.getDate();
+            let hours = today.getHours() - birthDate.getHours();
+            let minutes = today.getMinutes() - birthDate.getMinutes();
+            let seconds = today.getSeconds() - birthDate.getSeconds();
+
+            // Adjust for negative month and day differences
+            if (months < 0) {
+                months += 12;
+                years--;
+            }
+
+            if (days < 0) {
+                days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+                months--;
+            }
+
+            if (hours < 0) {
+                hours += 24;
+                days--;
+            }
+
+            if (minutes < 0) {
+                minutes += 60;
+                hours--;
+            }
+
+            if (seconds < 0) {
+                seconds += 60;
+                minutes--;
+            }
+
+            // Display result in both languages
+            result.textContent = currentLanguage === 'en' ? 
+                `Your age is: ${years} years, ${months} months, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds` :
+                `آپ کی عمر ہے: ${years} سال, ${months} مہینے, ${days} دن, ${hours} گھنٹے, ${minutes} منٹ, ${seconds} سیکنڈ`;
+        }
+
+        // Start the time and date updates when the page loads
+        updateTime();
+        updateDate();
+
+        // Update visitor count when the page is loaded
+        updateVisitorCount();
+    </script>
+</body>
+</html>
